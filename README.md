@@ -1,16 +1,31 @@
-# toddspong.com redirect
+# toddspong.com shortcut
 
-A single page that forwards `toddspong.com` to the Toddspong room, which is
-served from a Mac over Tailscale Funnel and therefore answers only to its
-`ts.net` name.
+This public GitHub Pages site redirects visitors to the Toddspong app on
+Tailscale Funnel. The address bar changes to the `ts.net` hostname; this does
+not host the chat or give Funnel a custom-domain certificate.
 
-It exists because Funnel cannot present a valid certificate for a custom
-domain, and because the alternative - moving the domain's nameservers to a
-provider with free forwarding - would have carried the Resend DKIM and SPF
-records with it and put invite email at risk for no gain.
+JavaScript preserves the path, query and fragment with `location.replace`.
+The visible button receives the same destination. Without JavaScript, a
+`noscript` meta refresh and the button open the room root; deep-link state is
+not preserved. The canonical link is search metadata, not a redirect.
+`404.html` is identical so unknown paths receive the same behavior.
 
-GitHub Pages serves this over HTTPS on the custom domain for free, and the
-domain's DNS stays exactly where it is.
+Use this as a memorable front door. The app should continue generating account
+verification/recovery links directly on its own hostname, so those links do not
+pass through GitHub Pages. The page has no analytics or external assets.
 
-`404.html` is a copy of `index.html` so that any path redirects, not only the
-root.
+## Check a change
+
+Run `node --test test-redirect.mjs` (Node 22 or newer). Keep both HTML files
+identical. Test navigation in a browser too: HTTP clients do not execute this
+HTML redirect. Do not mistake a successful Pages build for working public DNS.
+
+## Deployment
+
+Custom domain: `toddspong.com`; source: `main`, repository root. DNS remains at
+Wix. Follow the private app repository's `docs/point-toddspong-com.md` runbook
+for reviewed records, account-level domain verification, HTTPS and cellular
+acceptance. DNS/certificate issuance is a separate step from publishing this code.
+
+Before removing this repository or its custom domain, repoint DNS away from
+GitHub Pages and verify propagation. Keep domain verification in place.

@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Toddspong</title>
-    <!-- The redirect, three ways, in order of how early they take effect.
-         A canonical link keeps search engines pointed at the destination. -->
-    <meta http-equiv="refresh" content="0; url=https://tridips-mac-mini.taildad1f1.ts.net" />
+    <meta name="referrer" content="no-referrer" />
+    <!-- Without JavaScript, the static fallback opens the room's root. -->
+    <noscript><meta http-equiv="refresh" content="0; url=https://tridips-mac-mini.taildad1f1.ts.net/" /></noscript>
     <link rel="canonical" href="https://tridips-mac-mini.taildad1f1.ts.net" />
     <meta name="robots" content="noindex" />
     <style>
@@ -33,12 +33,18 @@
       <h1>Toddspong</h1>
       <p>Taking you to the room&hellip;</p>
       <!-- Shown when JavaScript is off and the refresh has not fired yet. -->
-      <a href="https://tridips-mac-mini.taildad1f1.ts.net">Continue to Toddspong</a>
+      <a id="continue" href="https://tridips-mac-mini.taildad1f1.ts.net">Continue to Toddspong</a>
     </main>
     <script>
       // replace() rather than assign(), so Back does not bounce the person
       // straight back here.
-      location.replace("https://tridips-mac-mini.taildad1f1.ts.net" + location.search + location.hash);
+      const destination = new URL("https://tridips-mac-mini.taildad1f1.ts.net/");
+      // Assign components on a fixed origin: even //other-host stays a path.
+      destination.pathname = location.pathname;
+      destination.search = location.search;
+      destination.hash = location.hash;
+      document.getElementById("continue").href = destination.href;
+      location.replace(destination.href);
     </script>
   </body>
 </html>
